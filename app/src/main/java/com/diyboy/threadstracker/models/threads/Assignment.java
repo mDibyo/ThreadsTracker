@@ -1,4 +1,4 @@
-package main.java.com.diyboy.threadstracker.threads;
+package com.diyboy.threadstracker.models.threads;
 
 import org.joda.time.DateTime;
 

@@ -1,7 +1,7 @@
 package main.java.com.diyboy.threadstracker.timechunks;
 
 
-import main.java.com.diyboy.threadstracker.threads.Task;
+import com.diyboy.threadstracker.models.threads.Task;
 import org.joda.time.*;
 
 public class TimeChunk implements Comparable<TimeChunk> {
