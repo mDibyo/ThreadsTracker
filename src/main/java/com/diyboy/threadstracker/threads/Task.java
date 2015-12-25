@@ -1,27 +1,21 @@
 package main.java.com.diyboy.threadstracker.threads;
 
-import org.joda.time.DateTime;
 
-public class Task extends Event implements Activity {
-  private DateTime deadline;
+import java.util.UUID;
 
-  public Task(String title, DateTime deadline, double importance) {
-    super(title, importance);
-    this.deadline = deadline;
-  }
+public interface Task {
+  UUID getUuid();
 
-  public Task(String title, DateTime deadline) {
-    super(title);
-    this.deadline = deadline;
-  }
+  String getTitle();
 
-  public DateTime getDeadline() {
-    return deadline;
-  }
+  void setTitle(String title);
 
-  public void setDeadline(DateTime newDeadline) {
-    deadline = newDeadline;
-  }
+  double getImportance();
 
+  void setImportance(double importance);
+
+  boolean isDone();
+
+  void setDone(boolean done);
 
 }

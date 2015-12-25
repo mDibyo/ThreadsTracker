@@ -2,7 +2,7 @@ package main.java.com.diyboy.threadstracker.threads;
 
 import java.util.UUID;
 
-public class Event implements Activity {
+public class Event implements Task {
   private UUID uuid;
   private boolean done;
   private String title;
