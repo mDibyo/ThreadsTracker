@@ -1,6 +1,9 @@
 package main.java.com.diyboy.threadstracker.threads;
 
 
+import main.java.com.diyboy.threadstracker.timechunks.TimeChunk;
+
+import java.util.SortedSet;
 import java.util.UUID;
 
 public interface Task {
@@ -17,5 +20,7 @@ public interface Task {
   boolean isDone();
 
   void setDone(boolean done);
+
+  SortedSet<TimeChunk> getAllocatedTimeChunks();
 
 }

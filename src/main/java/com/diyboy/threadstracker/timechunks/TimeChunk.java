@@ -47,6 +47,10 @@ public class TimeChunk implements Comparable<TimeChunk> {
     return assignedTask;
   }
 
+  public boolean isAssigned() {
+    return assignedTask != null;
+  }
+
   public boolean assignTask(Task task) {
     if (assignedTask != null && task.getUuid() != assignedTask.getUuid()) {
       return false;

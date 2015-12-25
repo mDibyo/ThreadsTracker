@@ -3,6 +3,7 @@ package main.java.com.diyboy.threadstracker.threads;
 import main.java.com.diyboy.threadstracker.timechunks.TimeChunk;
 
 import java.util.SortedSet;
+import java.util.TreeSet;
 import java.util.UUID;
 
 public abstract class AbstractTask implements Task {
@@ -10,12 +11,14 @@ public abstract class AbstractTask implements Task {
   private boolean done;
   private String title;
   private double importance;
+  private SortedSet<TimeChunk> allocatedTimeChunks;
 
   public AbstractTask(String title, double importance) {
     this.uuid = UUID.randomUUID();
     this.title = title;
     this.importance = importance;
     this.done = false;
+    this.allocatedTimeChunks = new TreeSet<TimeChunk>();
   }
 
   public UUID getUuid() {
@@ -46,4 +49,7 @@ public abstract class AbstractTask implements Task {
     done = newDone;
   }
 
+  public SortedSet<TimeChunk> getAllocatedTimeChunks() {
+    return allocatedTimeChunks;
+  }
 }
