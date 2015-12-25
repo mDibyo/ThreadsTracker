@@ -2,7 +2,9 @@ package main.java.com.diyboy.threadstracker.threads;
 
 import org.joda.time.DateTime;
 
-public class Assignment extends Event implements Task {
+public class Assignment extends AbstractTask {
+  public static final double DEFAULT_ASSIGNMENT_IMPORTANCE = 5;
+
   private DateTime deadline;
 
   public Assignment(String title, DateTime deadline, double importance) {
@@ -11,7 +13,7 @@ public class Assignment extends Event implements Task {
   }
 
   public Assignment(String title, DateTime deadline) {
-    super(title);
+    super(title, DEFAULT_ASSIGNMENT_IMPORTANCE);
     this.deadline = deadline;
   }
 

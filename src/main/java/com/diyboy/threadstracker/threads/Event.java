@@ -1,50 +1,10 @@
 package main.java.com.diyboy.threadstracker.threads;
 
-import java.util.UUID;
 
-public class Event implements Task {
-  private UUID uuid;
-  private boolean done;
-  private String title;
-  private double importance;
-
-  public Event(String title, double importance) {
-    this.uuid = UUID.randomUUID();
-    this.title = title;
-    this.importance = importance;
-    this.done = false;
-  }
+public class Event extends AbstractTask {
+  public static final double DEFAULT_EVENT_IMPORTANCE = 11;
 
   public Event(String title) {
-    this(title, 5);
+    super(title, DEFAULT_EVENT_IMPORTANCE);
   }
-
-  public UUID getUuid() {
-    return uuid;
-  }
-
-  public String getTitle() {
-    return title;
-  }
-
-  public void setTitle(String newTitle) {
-    title = newTitle;
-  }
-
-  public double getImportance() {
-    return importance;
-  }
-
-  public void setImportance(double newImportance) {
-    importance = newImportance;
-  }
-
-  public boolean isDone() {
-    return done;
-  }
-
-  public void setDone(boolean newDone) {
-    done = newDone;
-  }
-
 }
