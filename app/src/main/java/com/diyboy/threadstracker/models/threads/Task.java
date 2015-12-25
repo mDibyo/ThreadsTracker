@@ -1,7 +1,7 @@
 package com.diyboy.threadstracker.models.threads;
 
 
-import main.java.com.diyboy.threadstracker.timechunks.TimeChunk;
+import com.diyboy.threadstracker.models.timechunks.TimeChunk;
 
 import java.util.SortedSet;
 import java.util.UUID;

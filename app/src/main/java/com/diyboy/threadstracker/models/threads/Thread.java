@@ -1,9 +1,9 @@
 package com.diyboy.threadstracker.models.threads;
 
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
+
 
 public class Thread {
   public static final double DEFAULT_IMPORTANCE = 5;

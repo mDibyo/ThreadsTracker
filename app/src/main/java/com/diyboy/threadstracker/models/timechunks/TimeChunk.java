@@ -1,4 +1,4 @@
-package main.java.com.diyboy.threadstracker.timechunks;
+package com.diyboy.threadstracker.models.timechunks;
 
 
 import com.diyboy.threadstracker.models.threads.Task;
