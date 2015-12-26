@@ -1,6 +1,8 @@
 package com.diyboy.threadstracker.models.timechunks;
 
 
+import android.support.annotation.NonNull;
+
 import com.diyboy.threadstracker.models.threads.Task;
 import org.joda.time.*;
 
@@ -26,17 +28,22 @@ public class TimeChunk implements Comparable<TimeChunk> {
         this.interval = interval;
     }
 
-    public int compareTo(TimeChunk other) {
-        if (interval.equals(other.interval)) {
-            return 0;
-        }
-        if (interval.getEnd().compareTo(other.interval.getStart()) < 0) {
+    public int compareTo(@NonNull TimeChunk other) {
+        if (interval.isBefore(other.interval)) {
             return -1;
         }
-        if (interval.getStart().compareTo(other.interval.getEnd()) > 0) {
+        if (interval.isAfter(other.interval)) {
             return 1;
         }
         return 0;
+    }
+
+    public boolean equals(@NonNull TimeChunk other) {
+        return interval.equals(other.interval);
+    }
+
+    public int hashCode() {
+        return interval.hashCode();
     }
 
     public ReadableInterval getInterval() {

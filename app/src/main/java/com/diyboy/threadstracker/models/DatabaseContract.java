@@ -46,7 +46,7 @@ public class DatabaseContract {
                 "assignment_required_duration";
         public static final String COLUMN_NAME_EVENT_INTERVAL_START = "event_interval_start";
         public static final String COLUMN_NAME_EVENT_INTERVAL_END = "event_interval_end";
-        
+
         public static final String COMMAND_CREATE_TABLE = "CREATE TABLE " +
                 TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
@@ -60,6 +60,23 @@ public class DatabaseContract {
                 COLUMN_NAME_EVENT_INTERVAL_START + DATE_TIME_TYPE + COMMA_SEP +
                 COLUMN_NAME_EVENT_INTERVAL_END + DATE_TIME_TYPE + COMMA_SEP +
                 "FOREIGN KEY(" + COLUMN_NAME_THREAD_UUID + ") REFERENCES " + ThreadsTable.TABLE_NAME +"(" + ThreadsTable.COLUMN_NAME_UUID + ")" +
+                " )";
+        public static final String COMMAND_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
+    }
+
+    public static abstract class TimeChunksTable implements BaseColumns {
+        public static final String TABLE_NAME = "time_chunks";
+        public static final String COLUMN_NAME_INTERVAL_START = "interval_start";
+        public static final String COLUMN_NAME_INTERVAL_END = "interval_end";
+        public static final String COLUMN_NAME_TASK_UUID = "task_uuid";
+
+        public static final String COMMAND_CREATE_TABLE = "CREATE TABLE " +
+                TABLE_NAME + " (" +
+                _ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
+                COLUMN_NAME_INTERVAL_START + DATE_TIME_TYPE + COMMA_SEP +
+                COLUMN_NAME_INTERVAL_END + DATE_TIME_TYPE + COMMA_SEP +
+                COLUMN_NAME_TASK_UUID + STRING_TYPE + " NOT NULL" + COMMA_SEP +
+                "FOREIGN KEY(" + COLUMN_NAME_TASK_UUID + ") REFERENCES " + TasksTable.TABLE_NAME +"(" + TasksTable.COLUMN_NAME_UUID + ")" +
                 " )";
         public static final String COMMAND_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
