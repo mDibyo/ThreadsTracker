@@ -7,49 +7,49 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 public abstract class AbstractTask implements Task {
-  private UUID uuid;
-  private boolean done;
-  private String title;
-  private double importance;
-  private SortedSet<TimeChunk> allocatedTimeChunks;
+    private UUID uuid;
+    private boolean done;
+    private String title;
+    private double importance;
+    private SortedSet<TimeChunk> allocatedTimeChunks;
 
-  public AbstractTask(String title, double importance) {
-    this.uuid = UUID.randomUUID();
-    this.title = title;
-    this.importance = importance;
-    this.done = false;
-    this.allocatedTimeChunks = new TreeSet<TimeChunk>();
-  }
+    public AbstractTask(String title, double importance) {
+        this.uuid = UUID.randomUUID();
+        this.title = title;
+        this.importance = importance;
+        this.done = false;
+        this.allocatedTimeChunks = new TreeSet<>();
+    }
 
-  public UUID getUuid() {
-    return uuid;
-  }
+    public UUID getUuid() {
+        return uuid;
+    }
 
-  public String getTitle() {
-    return title;
-  }
+    public String getTitle() {
+        return title;
+    }
 
-  public void setTitle(String newTitle) {
-    title = newTitle;
-  }
+    public void setTitle(String newTitle) {
+        title = newTitle;
+    }
 
-  public double getImportance() {
-    return importance;
-  }
+    public double getImportance() {
+        return importance;
+    }
 
-  public void setImportance(double newImportance) {
-    importance = newImportance;
-  }
+    public void setImportance(double newImportance) {
+        importance = newImportance;
+    }
 
-  public boolean isDone() {
-    return done;
-  }
+    public boolean isDone() {
+        return done;
+    }
 
-  public void setDone(boolean newDone) {
-    done = newDone;
-  }
+    public void setDone(boolean newDone) {
+        done = newDone;
+    }
 
-  public SortedSet<TimeChunk> getAllocatedTimeChunks() {
-    return allocatedTimeChunks;
-  }
+    public SortedSet<TimeChunk> getAllocatedTimeChunks() {
+        return allocatedTimeChunks;
+    }
 }

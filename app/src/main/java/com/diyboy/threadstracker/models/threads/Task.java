@@ -7,20 +7,20 @@ import java.util.SortedSet;
 import java.util.UUID;
 
 public interface Task {
-  UUID getUuid();
+    UUID getUuid();
 
-  String getTitle();
+    String getTitle();
 
-  void setTitle(String title);
+    void setTitle(String title);
 
-  double getImportance();
+    double getImportance();
 
-  void setImportance(double importance);
+    void setImportance(double importance);
 
-  boolean isDone();
+    boolean isDone();
 
-  void setDone(boolean done);
+    void setDone(boolean done);
 
-  SortedSet<TimeChunk> getAllocatedTimeChunks();
+    SortedSet<TimeChunk> getAllocatedTimeChunks();
 
 }
