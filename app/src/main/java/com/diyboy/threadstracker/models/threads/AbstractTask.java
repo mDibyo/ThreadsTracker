@@ -21,35 +21,35 @@ public abstract class AbstractTask implements Task {
         this.allocatedTimeChunks = new TreeSet<>();
     }
 
-    public UUID getUuid() {
+    @Override public UUID getUuid() {
         return uuid;
     }
 
-    public String getTitle() {
+    @Override public String getTitle() {
         return title;
     }
 
-    public void setTitle(String newTitle) {
+    @Override public void setTitle(String newTitle) {
         title = newTitle;
     }
 
-    public double getImportance() {
+    @Override public double getImportance() {
         return importance;
     }
 
-    public void setImportance(double newImportance) {
+    @Override public void setImportance(double newImportance) {
         importance = newImportance;
     }
 
-    public boolean isDone() {
+    @Override public boolean isDone() {
         return done;
     }
 
-    public void setDone(boolean newDone) {
+    @Override public void setDone(boolean newDone) {
         done = newDone;
     }
 
-    public SortedSet<TimeChunk> getAllocatedTimeChunks() {
+    @Override public SortedSet<TimeChunk> getAllocatedTimeChunks() {
         return allocatedTimeChunks;
     }
 }
