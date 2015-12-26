@@ -1,4 +1,4 @@
-package com.diyboy.threadstracker;
+package com.diyboy.threadstracker.activities;
 
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -8,6 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import com.diyboy.threadstracker.R;
 
 public class MainActivity extends AppCompatActivity {
 
