@@ -8,21 +8,33 @@ import java.util.UUID;
 
 public abstract class AbstractTask implements Task {
     private UUID mUuid;
+    private Thread mThread;
     private boolean mDone;
     private String mTitle;
     private double mImportance;
     private SortedSet<TimeChunk> mAllocatedTimeChunks;
 
+    protected AbstractTask(UUID uuid, String title, double importance) {
+        mTitle = title;
+        mImportance = importance;
+        mDone = false;
+        mAllocatedTimeChunks = new TreeSet<>();
+    }
+
     public AbstractTask(String title, double importance) {
-        this.mUuid = UUID.randomUUID();
-        this.mTitle = title;
-        this.mImportance = importance;
-        this.mDone = false;
-        this.mAllocatedTimeChunks = new TreeSet<>();
+        this(UUID.randomUUID(), title, importance);
     }
 
     @Override public UUID getUuid() {
         return mUuid;
+    }
+
+    @Override public Thread getThread() {
+        return mThread;
+    }
+
+    @Override public void setThread(Thread thread) {
+        mThread = thread;
     }
 
     @Override public String getTitle() {

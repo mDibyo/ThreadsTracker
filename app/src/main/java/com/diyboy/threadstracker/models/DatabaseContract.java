@@ -1,6 +1,7 @@
 package com.diyboy.threadstracker.models;
 
 
+import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
 public class DatabaseContract {
@@ -41,6 +42,7 @@ public class DatabaseContract {
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_IMPORTANCE = "importance";
         public static final String COLUMN_NAME_DONE = "done";
+        public static final String COLUMN_NAME_IS_EVENT = "is_event";
         public static final String COLUMN_NAME_ASSIGNMENT_DEADLINE = "assignment_deadline";
         public static final String COLUMN_NAME_ASSIGNMENT_REQUIRED_DURATION =
                 "assignment_required_duration";
@@ -55,6 +57,7 @@ public class DatabaseContract {
                 COLUMN_NAME_TITLE + STRING_TYPE + " NOT NULL" + COMMA_SEP +
                 COLUMN_NAME_IMPORTANCE + FLOAT_TYPE + " NOT NULL" + COMMA_SEP +
                 COLUMN_NAME_DONE + BOOLEAN_TYPE + " NOT NULL" + COMMA_SEP +
+                COLUMN_NAME_IS_EVENT + BOOLEAN_TYPE + " NOT NULL" + COMMA_SEP +
                 COLUMN_NAME_ASSIGNMENT_DEADLINE + DATE_TIME_TYPE + COMMA_SEP +
                 COLUMN_NAME_ASSIGNMENT_REQUIRED_DURATION + DURATION_TYPE + COMMA_SEP +
                 COLUMN_NAME_EVENT_INTERVAL_START + DATE_TIME_TYPE + COMMA_SEP +

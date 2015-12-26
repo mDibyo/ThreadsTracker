@@ -1,8 +1,10 @@
 package com.diyboy.threadstracker.models.timechunks;
 
 
+import android.database.Cursor;
 import android.support.annotation.NonNull;
 
+import com.diyboy.threadstracker.models.DatabaseContract;
 import com.diyboy.threadstracker.models.threads.Task;
 import org.joda.time.*;
 
@@ -26,6 +28,14 @@ public class TimeChunk implements Comparable<TimeChunk> {
 
     public TimeChunk(ReadableInterval interval) {
         this.mInterval = interval;
+    }
+
+    public static TimeChunk fromDatabaseCursor(Cursor c) {
+        DateTime intervalStart = DateTime.parse(c.getString(c.getColumnIndex(
+                DatabaseContract.TimeChunksTable.COLUMN_NAME_INTERVAL_START)));
+        DateTime intervalEnd = DateTime.parse(c.getString(c.getColumnIndex(
+                DatabaseContract.TimeChunksTable.COLUMN_NAME_INTERVAL_END)));
+        return new TimeChunk(intervalStart, intervalEnd);
     }
 
     public int compareTo(@NonNull TimeChunk other) {

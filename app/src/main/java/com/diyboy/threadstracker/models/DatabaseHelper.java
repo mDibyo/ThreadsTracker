@@ -22,6 +22,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     public void onConfigure(SQLiteDatabase db) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             db.setForeignKeyConstraintsEnabled(true);
+            db.enableWriteAheadLogging();
         }
     }
 
