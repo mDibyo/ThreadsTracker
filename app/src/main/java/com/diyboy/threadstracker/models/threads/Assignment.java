@@ -1,20 +1,18 @@
 package com.diyboy.threadstracker.models.threads;
 
-import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.joda.time.ReadableDateTime;
 import org.joda.time.ReadableDuration;
 
 public class Assignment extends AbstractTask {
     public static final double DEFAULT_ASSIGNMENT_IMPORTANCE = 5;
 
-    private ReadableDateTime deadline;
-    private ReadableDuration requiredDuration;
+    private ReadableDateTime mDeadline;
+    private ReadableDuration mRequiredDuration;
 
     public Assignment(String title, ReadableDateTime deadline, ReadableDuration requiredDuration, double importance) {
         super(title, importance);
-        this.deadline = deadline;
-        this.requiredDuration = requiredDuration;
+        mDeadline = deadline;
+        mRequiredDuration = requiredDuration;
 
     }
 
@@ -23,19 +21,19 @@ public class Assignment extends AbstractTask {
     }
 
     public ReadableDateTime getDeadline() {
-        return deadline;
+        return mDeadline;
     }
 
-    public void setDeadline(ReadableDateTime newDeadline) {
-        deadline = newDeadline;
+    public void setDeadline(ReadableDateTime deadline) {
+        mDeadline = deadline;
     }
 
     public ReadableDuration getRequiredDuration() {
-        return requiredDuration;
+        return mRequiredDuration;
     }
 
-    public void setRequiredDuration(ReadableDuration newRequiredDuration) {
-        this.requiredDuration = newRequiredDuration;
+    public void setRequiredDuration(ReadableDuration requiredDuration) {
+        mRequiredDuration = requiredDuration;
     }
 
 

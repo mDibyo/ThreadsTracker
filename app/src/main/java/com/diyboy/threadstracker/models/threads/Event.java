@@ -6,11 +6,11 @@ import org.joda.time.ReadableInterval;
 public class Event extends AbstractTask {
     public static final double DEFAULT_EVENT_IMPORTANCE = 11;
 
-    private ReadableInterval interval;
+    private ReadableInterval mInterval;
 
     public Event(String title, ReadableInterval interval, double importance) {
         super(title, importance);
-        this.interval = interval;
+        mInterval = interval;
     }
 
     public Event(String title, ReadableInterval interval) {
@@ -18,10 +18,10 @@ public class Event extends AbstractTask {
     }
 
     public ReadableInterval getInterval() {
-        return interval;
+        return mInterval;
     }
 
-    public void setInterval(ReadableInterval newInterval) {
-        this.interval = newInterval;
+    public void setInterval(ReadableInterval interval) {
+        mInterval = interval;
     }
 }

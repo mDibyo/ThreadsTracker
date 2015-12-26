@@ -9,15 +9,15 @@ import org.joda.time.*;
 public class TimeChunk implements Comparable<TimeChunk> {
     public static final Duration DEFAULT_DURATION = new Duration(Duration.standardMinutes(15));
 
-    private ReadableInterval interval;
-    private Task assignedTask = null;
+    private ReadableInterval mInterval;
+    private Task mAssignedTask = null;
 
     public TimeChunk(DateTime startTime, DateTime endTime) {
-        this.interval = new Interval(startTime, endTime);
+        this.mInterval = new Interval(startTime, endTime);
     }
 
     public TimeChunk(DateTime startTime, Duration duration) {
-        this.interval = new Interval(startTime, duration);
+        this.mInterval = new Interval(startTime, duration);
     }
 
     public TimeChunk(DateTime startTime) {
@@ -25,50 +25,50 @@ public class TimeChunk implements Comparable<TimeChunk> {
     }
 
     public TimeChunk(ReadableInterval interval) {
-        this.interval = interval;
+        this.mInterval = interval;
     }
 
     public int compareTo(@NonNull TimeChunk other) {
-        if (interval.isBefore(other.interval)) {
+        if (mInterval.isBefore(other.mInterval)) {
             return -1;
         }
-        if (interval.isAfter(other.interval)) {
+        if (mInterval.isAfter(other.mInterval)) {
             return 1;
         }
         return 0;
     }
 
     public boolean equals(@NonNull TimeChunk other) {
-        return interval.equals(other.interval);
+        return mInterval.equals(other.mInterval);
     }
 
     public int hashCode() {
-        return interval.hashCode();
+        return mInterval.hashCode();
     }
 
     public ReadableInterval getInterval() {
-        return interval;
+        return mInterval;
     }
 
     public Task getAssignedTask() {
-        return assignedTask;
+        return mAssignedTask;
     }
 
     public boolean isAssigned() {
-        return assignedTask != null;
+        return mAssignedTask != null;
     }
 
     public boolean assignTask(Task task) {
-        if (assignedTask != null && task.getUuid() != assignedTask.getUuid()) {
+        if (mAssignedTask != null && task.getUuid() != mAssignedTask.getUuid()) {
             return false;
         }
-        assignedTask = task;
+        mAssignedTask = task;
         return true;
     }
 
     public Task unassignTask() {
-        Task unassignedTask = assignedTask;
-        assignedTask = null;
+        Task unassignedTask = mAssignedTask;
+        mAssignedTask = null;
         return unassignedTask;
     }
 

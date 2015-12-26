@@ -7,49 +7,49 @@ import java.util.TreeSet;
 import java.util.UUID;
 
 public abstract class AbstractTask implements Task {
-    private UUID uuid;
-    private boolean done;
-    private String title;
-    private double importance;
-    private SortedSet<TimeChunk> allocatedTimeChunks;
+    private UUID mUuid;
+    private boolean mDone;
+    private String mTitle;
+    private double mImportance;
+    private SortedSet<TimeChunk> mAllocatedTimeChunks;
 
     public AbstractTask(String title, double importance) {
-        this.uuid = UUID.randomUUID();
-        this.title = title;
-        this.importance = importance;
-        this.done = false;
-        this.allocatedTimeChunks = new TreeSet<>();
+        this.mUuid = UUID.randomUUID();
+        this.mTitle = title;
+        this.mImportance = importance;
+        this.mDone = false;
+        this.mAllocatedTimeChunks = new TreeSet<>();
     }
 
     @Override public UUID getUuid() {
-        return uuid;
+        return mUuid;
     }
 
     @Override public String getTitle() {
-        return title;
+        return mTitle;
     }
 
-    @Override public void setTitle(String newTitle) {
-        title = newTitle;
+    @Override public void setTitle(String title) {
+        mTitle = title;
     }
 
     @Override public double getImportance() {
-        return importance;
+        return mImportance;
     }
 
-    @Override public void setImportance(double newImportance) {
-        importance = newImportance;
+    @Override public void setImportance(double importance) {
+        mImportance = importance;
     }
 
     @Override public boolean isDone() {
-        return done;
+        return mDone;
     }
 
-    @Override public void setDone(boolean newDone) {
-        done = newDone;
+    @Override public void setDone(boolean done) {
+        mDone = done;
     }
 
     @Override public SortedSet<TimeChunk> getAllocatedTimeChunks() {
-        return allocatedTimeChunks;
+        return mAllocatedTimeChunks;
     }
 }

@@ -8,38 +8,43 @@ import java.util.UUID;
 public class Thread {
     public static final double DEFAULT_IMPORTANCE = 5;
 
-    private UUID uuid;
-    private String title;
-    private double importance;
-    private Set<Task> tasks;
+    private UUID mUuid;
+    private String mTitle;
+    private double mImportance;
+    private Set<Task> mTasks;
 
     public Thread(String title, double importance) {
-        this.title = title;
-        this.importance = importance;
-        this.tasks = new HashSet<Task>();
+        mUuid = UUID.randomUUID();
+        mTitle = title;
+        mImportance = importance;
+        mTasks = new HashSet<>();
     }
 
     public Thread(String title) {
         this(title, DEFAULT_IMPORTANCE);
     }
 
-    public String getTitle() {
-        return title;
+    public UUID getUuid() {
+        return mUuid;
     }
 
-    public void setTitle(String newTitle) {
-        title = newTitle;
+    public String getTitle() {
+        return mTitle;
+    }
+
+    public void setTitle(String title) {
+        mTitle = title;
     }
 
     public double getImportance() {
-        return importance;
+        return mImportance;
     }
 
-    public void setImportance(double newImportance) {
-        importance = newImportance;
+    public void setImportance(double importance) {
+        mImportance = importance;
     }
 
     public Set<Task> getTasks() {
-        return tasks;
+        return mTasks;
     }
 }
