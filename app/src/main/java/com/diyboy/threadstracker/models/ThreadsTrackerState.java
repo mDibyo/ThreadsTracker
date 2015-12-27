@@ -84,7 +84,7 @@ public class ThreadsTrackerState {
             timeChunk = TimeChunk.fromDatabaseCursor(timeChunksCursor);
             timeChunkMap.put(timeChunk.getInterval().getStart(), timeChunk);
             String taskUuidString = timeChunksCursor.getString(timeChunksCursor.getColumnIndex(
-                    TimeChunksDatabaseContract.TimeChunksTable.COLUMN_NAME_TASK_UUID
+                    TimeChunksDatabaseContract.TimeChunksTable.COLUMN_NAME_ASSIGNED_TASK_UUID
             ));
             if (taskUuidString != null) {
                 task = taskMap.get(UUID.fromString(taskUuidString));

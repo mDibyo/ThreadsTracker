@@ -1,9 +1,8 @@
 package com.diyboy.threadstracker.models.threads;
 
 
+import android.content.ContentValues;
 import android.database.Cursor;
-
-import com.diyboy.threadstracker.models.DatabaseContract;
 
 import org.joda.time.DateTime;
 import org.joda.time.Interval;
@@ -16,13 +15,13 @@ public class Event extends AbstractTask {
 
     private ReadableInterval mInterval;
 
-    protected Event(UUID uuid, String title, ReadableInterval interval, double importance) {
-        super(uuid, title, importance);
+    protected Event(boolean saved, UUID uuid, String title, ReadableInterval interval, double importance) {
+        super(saved, uuid, title, importance);
         mInterval = interval;
     }
 
     public Event(String title, ReadableInterval interval, double importance) {
-        this(UUID.randomUUID(), title, interval, importance);
+        this(false, UUID.randomUUID(), title, interval, importance);
     }
 
     public Event(String title, ReadableInterval interval) {
@@ -31,17 +30,37 @@ public class Event extends AbstractTask {
 
     public static Event fromDatabaseCursor(Cursor c) {
         UUID uuid = UUID.fromString(c.getString(c.getColumnIndex(
-                DatabaseContract.TasksTable.COLUMN_NAME_UUID)));
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_UUID)));
         String title = c.getString(c.getColumnIndex(
-                DatabaseContract.TasksTable.COLUMN_NAME_TITLE));
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_TITLE));
         double importance = c.getDouble(c.getColumnIndex(
-                DatabaseContract.TasksTable.COLUMN_NAME_IMPORTANCE));
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_IMPORTANCE));
         DateTime intervalStart = DateTime.parse(c.getString(c.getColumnIndex(
-                DatabaseContract.TasksTable.COLUMN_NAME_EVENT_INTERVAL_START)));
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_EVENT_INTERVAL_START)));
         DateTime intervalEnd = DateTime.parse(c.getString(c.getColumnIndex(
-                DatabaseContract.TasksTable.COLUMN_NAME_EVENT_INTERVAL_END)));
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_EVENT_INTERVAL_END)));
         ReadableInterval interval = new Interval(intervalStart, intervalEnd);
-        return new Event(uuid, title, interval, importance);
+        return new Event(true, uuid, title, interval, importance);
+    }
+
+    @Override
+    public ContentValues toContentValues() {
+        ContentValues contentValues = super.toContentValues();
+        contentValues.put(
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_EVENT_INTERVAL_START,
+                mInterval.getStart().toString());
+        contentValues.put(
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_EVENT_INTERVAL_END,
+                mInterval.getEnd().toString());
+        return contentValues;
+    }
+
+    public boolean isSaved() {
+        return mSaved;
+    }
+
+    public void setSaved(boolean saved) {
+        mSaved = saved;
     }
 
     public ReadableInterval getInterval() {
@@ -49,6 +68,7 @@ public class Event extends AbstractTask {
     }
 
     public void setInterval(ReadableInterval interval) {
+        mSaved = false;
         mInterval = interval;
     }
 }

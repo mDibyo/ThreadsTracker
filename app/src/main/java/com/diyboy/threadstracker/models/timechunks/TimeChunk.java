@@ -1,11 +1,12 @@
 package com.diyboy.threadstracker.models.timechunks;
 
 
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
-import com.diyboy.threadstracker.models.DatabaseContract;
 import com.diyboy.threadstracker.models.threads.Task;
+
 import org.joda.time.*;
 
 public class TimeChunk implements Comparable<TimeChunk> {
@@ -14,12 +15,20 @@ public class TimeChunk implements Comparable<TimeChunk> {
     private ReadableInterval mInterval;
     private Task mAssignedTask = null;
 
+    private boolean mSaved = false;
+
+    private TimeChunk(boolean saved, DateTime startTime, DateTime endTime) {
+        mSaved = saved;
+        mInterval = new Interval(startTime, endTime);
+    }
+
     public TimeChunk(DateTime startTime, DateTime endTime) {
-        this.mInterval = new Interval(startTime, endTime);
+        this(false, startTime, endTime);
     }
 
     public TimeChunk(DateTime startTime, Duration duration) {
-        this.mInterval = new Interval(startTime, duration);
+        mSaved = false;
+        mInterval = new Interval(startTime, duration);
     }
 
     public TimeChunk(DateTime startTime) {
@@ -27,15 +36,40 @@ public class TimeChunk implements Comparable<TimeChunk> {
     }
 
     public TimeChunk(ReadableInterval interval) {
+        mSaved = false;
         this.mInterval = interval;
     }
 
     public static TimeChunk fromDatabaseCursor(Cursor c) {
         DateTime intervalStart = DateTime.parse(c.getString(c.getColumnIndex(
-                DatabaseContract.TimeChunksTable.COLUMN_NAME_INTERVAL_START)));
+                TimeChunksDatabaseContract.TimeChunksTable.COLUMN_NAME_INTERVAL_START)));
         DateTime intervalEnd = DateTime.parse(c.getString(c.getColumnIndex(
-                DatabaseContract.TimeChunksTable.COLUMN_NAME_INTERVAL_END)));
-        return new TimeChunk(intervalStart, intervalEnd);
+                TimeChunksDatabaseContract.TimeChunksTable.COLUMN_NAME_INTERVAL_END)));
+        return new TimeChunk(true, intervalStart, intervalEnd);
+    }
+
+    public ContentValues toContentValues() {
+        ContentValues contentValues = new ContentValues(3);
+        contentValues.put(
+                TimeChunksDatabaseContract.TimeChunksTable.COLUMN_NAME_INTERVAL_START,
+                mInterval.getStart().toString());
+        contentValues.put(
+                TimeChunksDatabaseContract.TimeChunksTable.COLUMN_NAME_INTERVAL_END,
+                mInterval.getEnd().toString());
+        if (mAssignedTask != null) {
+            contentValues.put(
+                    TimeChunksDatabaseContract.TimeChunksTable.COLUMN_NAME_ASSIGNED_TASK_UUID,
+                    mAssignedTask.getUuid().toString());
+        }
+        return contentValues;
+    }
+
+    public boolean isSaved() {
+        return mSaved;
+    }
+
+    public void setSaved(boolean saved) {
+        mSaved = saved;
     }
 
     public int compareTo(@NonNull TimeChunk other) {
@@ -72,11 +106,13 @@ public class TimeChunk implements Comparable<TimeChunk> {
         if (mAssignedTask != null && task.getUuid() != mAssignedTask.getUuid()) {
             return false;
         }
+        mSaved = false;
         mAssignedTask = task;
         return true;
     }
 
     public Task unassignTask() {
+        mSaved = false;
         Task unassignedTask = mAssignedTask;
         mAssignedTask = null;
         return unassignedTask;

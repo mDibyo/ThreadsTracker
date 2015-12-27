@@ -1,8 +1,7 @@
 package com.diyboy.threadstracker.models.threads;
 
+import android.content.ContentValues;
 import android.database.Cursor;
-
-import com.diyboy.threadstracker.models.DatabaseContract;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -17,7 +16,10 @@ public class Thread {
     private double mImportance;
     private Set<Task> mTasks;
 
-    private Thread(UUID uuid, String title, double importance) {
+    private boolean mSaved;
+
+    private Thread(boolean saved, UUID uuid, String title, double importance) {
+        mSaved = saved;
         mUuid = uuid;
         mTitle = title;
         mImportance = importance;
@@ -25,7 +27,7 @@ public class Thread {
     }
 
     public Thread(String title, double importance) {
-        this(UUID.randomUUID(), title, importance);
+        this(false, UUID.randomUUID(), title, importance);
     }
 
     public Thread(String title) {
@@ -34,12 +36,28 @@ public class Thread {
 
     public static Thread fromDatabaseCursor(Cursor c) {
         UUID uuid = UUID.fromString(c.getString(c.getColumnIndex(
-                DatabaseContract.ThreadsTable.COLUMN_NAME_UUID)));
+                ThreadsDatabaseContract.ThreadsTable.COLUMN_NAME_UUID)));
         String title = c.getString(c.getColumnIndex(
-                DatabaseContract.ThreadsTable.COLUMN_NAME_TITLE));
+                ThreadsDatabaseContract.ThreadsTable.COLUMN_NAME_TITLE));
         double importance = c.getDouble(c.getColumnIndex(
-                DatabaseContract.ThreadsTable.COLUMN_NAME_IMPORTANCE));
-        return new Thread(uuid, title, importance);
+                ThreadsDatabaseContract.ThreadsTable.COLUMN_NAME_IMPORTANCE));
+        return new Thread(true, uuid, title, importance);
+    }
+
+    public ContentValues toContentValues() {
+        ContentValues contentValues = new ContentValues(3);
+        contentValues.put(ThreadsDatabaseContract.ThreadsTable.COLUMN_NAME_UUID, mUuid.toString());
+        contentValues.put(ThreadsDatabaseContract.ThreadsTable.COLUMN_NAME_TITLE, mTitle);
+        contentValues.put(ThreadsDatabaseContract.ThreadsTable.COLUMN_NAME_IMPORTANCE, mImportance);
+        return contentValues;
+    }
+
+    public boolean isSaved() {
+        return mSaved;
+    }
+
+    public void setSaved(boolean saved) {
+        mSaved = saved;
     }
 
     public UUID getUuid() {
@@ -51,6 +69,7 @@ public class Thread {
     }
 
     public void setTitle(String title) {
+        mSaved = false;
         mTitle = title;
     }
 
@@ -59,10 +78,16 @@ public class Thread {
     }
 
     public void setImportance(double importance) {
+        mSaved = false;
         mImportance = importance;
     }
 
+    public Task[] getTasksReadOnly() {
+        return mTasks.toArray(new Task[mTasks.size()]);
+    }
+
     public Set<Task> getTasks() {
+        mSaved = false;
         return mTasks;
     }
 }

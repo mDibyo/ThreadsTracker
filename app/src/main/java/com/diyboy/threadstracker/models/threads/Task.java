@@ -1,7 +1,7 @@
 package com.diyboy.threadstracker.models.threads;
 
 
-import android.database.Cursor;
+import android.content.ContentValues;
 
 import com.diyboy.threadstracker.models.timechunks.TimeChunk;
 
@@ -9,7 +9,13 @@ import java.util.SortedSet;
 import java.util.UUID;
 
 public interface Task {
+    ContentValues toContentValues();
+
     UUID getUuid();
+
+     boolean isSaved();
+
+    void setSaved(boolean saved);
 
     void setThread(Thread thread);
 
@@ -29,4 +35,5 @@ public interface Task {
 
     SortedSet<TimeChunk> getAllocatedTimeChunks();
 
+    TimeChunk[] getAllocatedTimeChunksReadOnly();
 }

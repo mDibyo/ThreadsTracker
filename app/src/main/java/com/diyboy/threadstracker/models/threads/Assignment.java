@@ -1,8 +1,7 @@
 package com.diyboy.threadstracker.models.threads;
 
+import android.content.ContentValues;
 import android.database.Cursor;
-
-import com.diyboy.threadstracker.models.DatabaseContract;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
@@ -17,14 +16,14 @@ public class Assignment extends AbstractTask {
     private ReadableDateTime mDeadline;
     private ReadableDuration mRequiredDuration;
 
-    protected Assignment(UUID uuid, String title, ReadableDateTime deadline, ReadableDuration requiredDuration, double importance) {
-        super(uuid, title, importance);
+    protected Assignment(boolean saved, UUID uuid, String title, ReadableDateTime deadline, ReadableDuration requiredDuration, double importance) {
+        super(saved, uuid, title, importance);
         mDeadline = deadline;
         mRequiredDuration = requiredDuration;
     }
 
     public Assignment(String title, ReadableDateTime deadline, ReadableDuration requiredDuration, double importance) {
-        this(UUID.randomUUID(), title, deadline, requiredDuration, importance);
+        this(false, UUID.randomUUID(), title, deadline, requiredDuration, importance);
     }
 
     public Assignment(String title, ReadableDateTime deadline, ReadableDuration requiredDuration) {
@@ -33,16 +32,28 @@ public class Assignment extends AbstractTask {
 
     public static Assignment fromDatabaseCursor(Cursor c) {
         UUID uuid = UUID.fromString(c.getString(c.getColumnIndex(
-                DatabaseContract.TasksTable.COLUMN_NAME_UUID)));
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_UUID)));
         String title = c.getString(c.getColumnIndex(
-                DatabaseContract.TasksTable.COLUMN_NAME_TITLE));
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_TITLE));
         double importance = c.getDouble(c.getColumnIndex(
-                DatabaseContract.TasksTable.COLUMN_NAME_IMPORTANCE));
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_IMPORTANCE));
         ReadableDateTime deadline = DateTime.parse(c.getString(c.getColumnIndex(
-                DatabaseContract.TasksTable.COLUMN_NAME_ASSIGNMENT_DEADLINE)));
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_ASSIGNMENT_DEADLINE)));
         ReadableDuration requiredDuration = new Duration(c.getLong(c.getColumnIndex(
-                DatabaseContract.TasksTable.COLUMN_NAME_ASSIGNMENT_REQUIRED_DURATION)));
-        return new Assignment(uuid, title, deadline, requiredDuration, importance);
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_ASSIGNMENT_REQUIRED_DURATION)));
+        return new Assignment(true, uuid, title, deadline, requiredDuration, importance);
+    }
+
+    @Override
+    public ContentValues toContentValues() {
+        ContentValues contentValues = super.toContentValues();
+        contentValues.put(
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_ASSIGNMENT_DEADLINE,
+                mDeadline.toString());
+        contentValues.put(
+                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_ASSIGNMENT_REQUIRED_DURATION,
+                mRequiredDuration.getMillis());
+        return contentValues;
     }
 
     public ReadableDateTime getDeadline() {
@@ -50,6 +61,7 @@ public class Assignment extends AbstractTask {
     }
 
     public void setDeadline(ReadableDateTime deadline) {
+        mSaved = false;
         mDeadline = deadline;
     }
 
@@ -58,6 +70,7 @@ public class Assignment extends AbstractTask {
     }
 
     public void setRequiredDuration(ReadableDuration requiredDuration) {
+        mSaved = false;
         mRequiredDuration = requiredDuration;
     }
 
