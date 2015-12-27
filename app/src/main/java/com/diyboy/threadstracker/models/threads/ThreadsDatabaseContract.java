@@ -1,23 +1,15 @@
-package com.diyboy.threadstracker.models;
+package com.diyboy.threadstracker.models.threads;
 
 
-import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 
-public class DatabaseContract {
-    public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "database.db";
+import com.diyboy.threadstracker.models.BaseDatabaseContract;
 
-    private static final String STRING_TYPE = " TEXT";
-    private static final String FLOAT_TYPE = " REAL";
-    private static final String BOOLEAN_TYPE = " BOOLEAN";
-    private static final String DATE_TIME_TYPE = " DATETIME";
-    private static final String DURATION_TYPE = " REAL";
-    private static final String COMMA_SEP = ", ";
-
+public class ThreadsDatabaseContract extends BaseDatabaseContract {
     // To prevent someone from accidentally instantiating the contract class,
     // give it an empty constructor.
-    private DatabaseContract() {}
+    protected ThreadsDatabaseContract() {
+    }
 
     public static abstract class ThreadsTable implements BaseColumns {
         public static final String TABLE_NAME = "threads";
@@ -63,23 +55,6 @@ public class DatabaseContract {
                 COLUMN_NAME_EVENT_INTERVAL_START + DATE_TIME_TYPE + COMMA_SEP +
                 COLUMN_NAME_EVENT_INTERVAL_END + DATE_TIME_TYPE + COMMA_SEP +
                 "FOREIGN KEY(" + COLUMN_NAME_THREAD_UUID + ") REFERENCES " + ThreadsTable.TABLE_NAME +"(" + ThreadsTable.COLUMN_NAME_UUID + ")" +
-                " )";
-        public static final String COMMAND_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
-    }
-
-    public static abstract class TimeChunksTable implements BaseColumns {
-        public static final String TABLE_NAME = "time_chunks";
-        public static final String COLUMN_NAME_INTERVAL_START = "interval_start";
-        public static final String COLUMN_NAME_INTERVAL_END = "interval_end";
-        public static final String COLUMN_NAME_TASK_UUID = "task_uuid";
-
-        public static final String COMMAND_CREATE_TABLE = "CREATE TABLE " +
-                TABLE_NAME + " (" +
-                _ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
-                COLUMN_NAME_INTERVAL_START + DATE_TIME_TYPE + COMMA_SEP +
-                COLUMN_NAME_INTERVAL_END + DATE_TIME_TYPE + COMMA_SEP +
-                COLUMN_NAME_TASK_UUID + STRING_TYPE + " NOT NULL" + COMMA_SEP +
-                "FOREIGN KEY(" + COLUMN_NAME_TASK_UUID + ") REFERENCES " + TasksTable.TABLE_NAME +"(" + TasksTable.COLUMN_NAME_UUID + ")" +
                 " )";
         public static final String COMMAND_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
