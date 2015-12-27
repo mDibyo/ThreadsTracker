@@ -46,6 +46,7 @@ public class Event extends AbstractTask {
     @Override
     public ContentValues toContentValues() {
         ContentValues contentValues = super.toContentValues();
+        contentValues.put(ThreadsDatabaseContract.TasksTable.COLUMN_NAME_IS_EVENT, true);
         contentValues.put(
                 ThreadsDatabaseContract.TasksTable.COLUMN_NAME_EVENT_INTERVAL_START,
                 mInterval.getStart().toString());
@@ -55,20 +56,14 @@ public class Event extends AbstractTask {
         return contentValues;
     }
 
-    public boolean isSaved() {
-        return mSaved;
-    }
-
-    public void setSaved(boolean saved) {
-        mSaved = saved;
-    }
-
     public ReadableInterval getInterval() {
         return mInterval;
     }
 
     public void setInterval(ReadableInterval interval) {
-        mSaved = false;
+        acquireWriteLock(true);
+        setSaved(false);
         mInterval = interval;
+        releaseWriteLock();
     }
 }

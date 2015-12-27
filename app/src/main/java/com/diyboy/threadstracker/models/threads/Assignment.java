@@ -47,9 +47,10 @@ public class Assignment extends AbstractTask {
     @Override
     public ContentValues toContentValues() {
         ContentValues contentValues = super.toContentValues();
+        contentValues.put(ThreadsDatabaseContract.TasksTable.COLUMN_NAME_IS_EVENT, false);
         contentValues.put(
-                ThreadsDatabaseContract.TasksTable.COLUMN_NAME_ASSIGNMENT_DEADLINE,
-                mDeadline.toString());
+        ThreadsDatabaseContract.TasksTable.COLUMN_NAME_ASSIGNMENT_DEADLINE,
+        mDeadline.toString());
         contentValues.put(
                 ThreadsDatabaseContract.TasksTable.COLUMN_NAME_ASSIGNMENT_REQUIRED_DURATION,
                 mRequiredDuration.getMillis());
@@ -61,8 +62,10 @@ public class Assignment extends AbstractTask {
     }
 
     public void setDeadline(ReadableDateTime deadline) {
-        mSaved = false;
+        acquireWriteLock(true);
+        setSaved(false);
         mDeadline = deadline;
+        releaseWriteLock();
     }
 
     public ReadableDuration getRequiredDuration() {
@@ -70,9 +73,9 @@ public class Assignment extends AbstractTask {
     }
 
     public void setRequiredDuration(ReadableDuration requiredDuration) {
-        mSaved = false;
+        acquireWriteLock(true);
+        setSaved(false);
         mRequiredDuration = requiredDuration;
+        releaseWriteLock();
     }
-
-
 }

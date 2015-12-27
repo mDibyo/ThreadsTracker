@@ -2,13 +2,14 @@ package com.diyboy.threadstracker.models.threads;
 
 import android.content.ContentValues;
 
+import com.diyboy.threadstracker.models.BaseDatabaseSyncable;
 import com.diyboy.threadstracker.models.timechunks.TimeChunk;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 
-public abstract class AbstractTask implements Task {
+public abstract class AbstractTask extends BaseDatabaseSyncable implements Task {
     protected UUID mUuid;
     protected Thread mThread;
     protected boolean mDone;
@@ -16,10 +17,8 @@ public abstract class AbstractTask implements Task {
     protected double mImportance;
     protected SortedSet<TimeChunk> mAllocatedTimeChunks;
 
-    protected boolean mSaved;
-
     protected AbstractTask(boolean saved, UUID uuid, String title, double importance) {
-        mSaved = saved;
+        super(saved);
         mUuid = uuid;
         mTitle = title;
         mImportance = importance;
@@ -44,17 +43,6 @@ public abstract class AbstractTask implements Task {
         return contentValues;
     }
 
-
-    @Override
-    public boolean isSaved() {
-        return mSaved;
-    }
-
-    @Override
-    public void setSaved(boolean saved) {
-        mSaved = saved;
-    }
-
     @Override
     public UUID getUuid() {
         return mUuid;
@@ -67,8 +55,10 @@ public abstract class AbstractTask implements Task {
 
     @Override
     public void setThread(Thread thread) {
-        mSaved = false;
+        acquireWriteLock(true);
+        setSaved(false);
         mThread = thread;
+        releaseWriteLock();
     }
 
     @Override
@@ -78,8 +68,10 @@ public abstract class AbstractTask implements Task {
 
     @Override
     public void setTitle(String title) {
-        mSaved = false;
+        acquireWriteLock(true);
+        setSaved(false);
         mTitle = title;
+        releaseWriteLock();
     }
 
     @Override
@@ -89,8 +81,10 @@ public abstract class AbstractTask implements Task {
 
     @Override
     public void setImportance(double importance) {
-        mSaved = false;
+        acquireWriteLock(true);
+        setSaved(false);
         mImportance = importance;
+        releaseWriteLock();
     }
 
     @Override
@@ -100,13 +94,18 @@ public abstract class AbstractTask implements Task {
 
     @Override
     public void setDone(boolean done) {
-        mSaved = false;
+        acquireWriteLock(true);
+        setSaved(false);
         mDone = done;
+        releaseWriteLock();
     }
 
     @Override
     public SortedSet<TimeChunk> getAllocatedTimeChunks() {
-        mSaved = false;
+        if (!writeLockIsHeldByCurrentThread()) {
+            return null;
+        }
+        setSaved(false);
         return mAllocatedTimeChunks;
     }
 

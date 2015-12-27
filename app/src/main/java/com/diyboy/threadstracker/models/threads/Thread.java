@@ -3,12 +3,14 @@ package com.diyboy.threadstracker.models.threads;
 import android.content.ContentValues;
 import android.database.Cursor;
 
+import com.diyboy.threadstracker.models.BaseDatabaseSyncable;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
 
-public class Thread {
+public class Thread extends BaseDatabaseSyncable {
     public static final double DEFAULT_IMPORTANCE = 5;
 
     private UUID mUuid;
@@ -16,10 +18,8 @@ public class Thread {
     private double mImportance;
     private Set<Task> mTasks;
 
-    private boolean mSaved;
-
     private Thread(boolean saved, UUID uuid, String title, double importance) {
-        mSaved = saved;
+        super(saved);
         mUuid = uuid;
         mTitle = title;
         mImportance = importance;
@@ -52,14 +52,6 @@ public class Thread {
         return contentValues;
     }
 
-    public boolean isSaved() {
-        return mSaved;
-    }
-
-    public void setSaved(boolean saved) {
-        mSaved = saved;
-    }
-
     public UUID getUuid() {
         return mUuid;
     }
@@ -69,8 +61,10 @@ public class Thread {
     }
 
     public void setTitle(String title) {
-        mSaved = false;
+        acquireWriteLock(true);
+        setSaved(false);
         mTitle = title;
+        releaseWriteLock();
     }
 
     public double getImportance() {
@@ -78,8 +72,10 @@ public class Thread {
     }
 
     public void setImportance(double importance) {
-        mSaved = false;
+        acquireWriteLock(true);
+        setSaved(false);
         mImportance = importance;
+        releaseWriteLock();
     }
 
     public Task[] getTasksReadOnly() {
@@ -87,7 +83,10 @@ public class Thread {
     }
 
     public Set<Task> getTasks() {
-        mSaved = false;
+        if (!writeLockIsHeldByCurrentThread()) {
+            return null;
+        }
+        setSaved(false);
         return mTasks;
     }
 }

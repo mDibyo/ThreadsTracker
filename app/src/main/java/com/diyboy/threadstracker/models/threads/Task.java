@@ -1,21 +1,13 @@
 package com.diyboy.threadstracker.models.threads;
 
-
-import android.content.ContentValues;
-
+import com.diyboy.threadstracker.models.DatabaseSyncable;
 import com.diyboy.threadstracker.models.timechunks.TimeChunk;
 
 import java.util.SortedSet;
 import java.util.UUID;
 
-public interface Task {
-    ContentValues toContentValues();
-
+public interface Task extends DatabaseSyncable {
     UUID getUuid();
-
-     boolean isSaved();
-
-    void setSaved(boolean saved);
 
     void setThread(Thread thread);
 

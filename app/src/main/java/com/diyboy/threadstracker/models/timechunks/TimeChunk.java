@@ -5,20 +5,19 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.support.annotation.NonNull;
 
+import com.diyboy.threadstracker.models.BaseDatabaseSyncable;
 import com.diyboy.threadstracker.models.threads.Task;
 
 import org.joda.time.*;
 
-public class TimeChunk implements Comparable<TimeChunk> {
+public class TimeChunk extends BaseDatabaseSyncable implements Comparable<TimeChunk> {
     public static final Duration DEFAULT_DURATION = new Duration(Duration.standardMinutes(15));
 
     private ReadableInterval mInterval;
     private Task mAssignedTask = null;
 
-    private boolean mSaved = false;
-
     private TimeChunk(boolean saved, DateTime startTime, DateTime endTime) {
-        mSaved = saved;
+        super(saved);
         mInterval = new Interval(startTime, endTime);
     }
 
@@ -27,7 +26,7 @@ public class TimeChunk implements Comparable<TimeChunk> {
     }
 
     public TimeChunk(DateTime startTime, Duration duration) {
-        mSaved = false;
+        super(false);
         mInterval = new Interval(startTime, duration);
     }
 
@@ -36,7 +35,7 @@ public class TimeChunk implements Comparable<TimeChunk> {
     }
 
     public TimeChunk(ReadableInterval interval) {
-        mSaved = false;
+        super(false);
         this.mInterval = interval;
     }
 
@@ -62,14 +61,6 @@ public class TimeChunk implements Comparable<TimeChunk> {
                     mAssignedTask.getUuid().toString());
         }
         return contentValues;
-    }
-
-    public boolean isSaved() {
-        return mSaved;
-    }
-
-    public void setSaved(boolean saved) {
-        mSaved = saved;
     }
 
     public int compareTo(@NonNull TimeChunk other) {
@@ -106,15 +97,19 @@ public class TimeChunk implements Comparable<TimeChunk> {
         if (mAssignedTask != null && task.getUuid() != mAssignedTask.getUuid()) {
             return false;
         }
-        mSaved = false;
+        acquireWriteLock(true);
+        setSaved(false);
         mAssignedTask = task;
+        releaseWriteLock();
         return true;
     }
 
     public Task unassignTask() {
-        mSaved = false;
+        acquireWriteLock(true);
+        setSaved(false);
         Task unassignedTask = mAssignedTask;
         mAssignedTask = null;
+        releaseWriteLock();
         return unassignedTask;
     }
 
