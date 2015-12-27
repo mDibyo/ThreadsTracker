@@ -1,8 +1,11 @@
 package com.diyboy.threadstracker.models;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
 import com.diyboy.threadstracker.models.threads.Assignment;
 import com.diyboy.threadstracker.models.threads.Event;
@@ -19,6 +22,8 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ThreadsTrackerState {
+    public static String THREADS_TRACKER_STATE_LOG_TAG = "ThreadsTrackerState";
+
     private static ThreadsTrackerState instance;
 
     private Map<UUID, Thread> mThreadMap;
@@ -95,6 +100,40 @@ public class ThreadsTrackerState {
         }
 
         return new ThreadsTrackerState(threadMap, timeChunkMap);
+    }
+
+    public synchronized boolean flushToDatabase(Context context) {
+        try {
+            SQLiteDatabase db = DatabaseHelper.getInstance(context).getWritableDatabase();
+
+            for (Thread thread : mThreadMap.values()) {
+                syncWithDatabase(db, ThreadsDatabaseContract.ThreadsTable.TABLE_NAME, thread);
+
+                for (Task task : thread.getTasksReadOnly()) {
+                    syncWithDatabase(db, ThreadsDatabaseContract.TasksTable.TABLE_NAME, task);
+                }
+            }
+
+            for (TimeChunk timeChunk : mTimeChunkMap.values()) {
+                syncWithDatabase(db, TimeChunksDatabaseContract.TimeChunksTable.TABLE_NAME, timeChunk);
+            }
+
+            return true;
+        } catch (SQLiteException exception) {
+            Log.e(THREADS_TRACKER_STATE_LOG_TAG, "flushToDatabase() failed", exception);
+            return false;
+        }
+    }
+
+    private void syncWithDatabase(SQLiteDatabase db, String tableName, DatabaseSyncable ds)
+            throws SQLiteException {
+        ds.acquireWriteLock(true);
+        if (!ds.isSaved()) {
+            ContentValues contentValues = ds.toContentValues();
+            db.insertWithOnConflict(tableName, null, contentValues, SQLiteDatabase.CONFLICT_REPLACE);
+            ds.setSaved(true);
+        }
+        ds.releaseWriteLock();
     }
 
     public Map<UUID, Thread> getThreadMap() {
