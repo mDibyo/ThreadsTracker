@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
 
 public class BaseDatabaseContract {
     public static final int DATABASE_VERSION = 1;
-    public static final String DATABASE_NAME = "database.db";
+    public static final String DATABASE_NAME = "threadsTrackerDatabase.db";
 
     protected static final String STRING_TYPE = " TEXT";
     protected static final String FLOAT_TYPE = " REAL";

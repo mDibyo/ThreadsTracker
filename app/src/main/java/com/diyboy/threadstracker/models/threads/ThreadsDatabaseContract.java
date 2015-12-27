@@ -17,12 +17,14 @@ public class ThreadsDatabaseContract extends BaseDatabaseContract {
         public static final String COLUMN_NAME_TITLE = "title";
         public static final String COLUMN_NAME_IMPORTANCE = "importance";
 
-        public static final String COMMAND_CREATE_TABLE = "CREATE TABLE " +
+        public static final String COMMAND_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
                 COLUMN_NAME_UUID + " NOT NULL" + STRING_TYPE + COMMA_SEP +
                 COLUMN_NAME_TITLE + " NOT NULL" + STRING_TYPE + COMMA_SEP +
                 COLUMN_NAME_IMPORTANCE + " NOT NULL" + FLOAT_TYPE + COMMA_SEP +
+                "UNIQUE (" + COLUMN_NAME_UUID + ")" +
+                "ON CONFLICT REPLACE" +
                 " )";
         public static final String COMMAND_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
@@ -41,7 +43,7 @@ public class ThreadsDatabaseContract extends BaseDatabaseContract {
         public static final String COLUMN_NAME_EVENT_INTERVAL_START = "event_interval_start";
         public static final String COLUMN_NAME_EVENT_INTERVAL_END = "event_interval_end";
 
-        public static final String COMMAND_CREATE_TABLE = "CREATE TABLE " +
+        public static final String COMMAND_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
                 COLUMN_NAME_UUID + STRING_TYPE + " NOT NULL" + COMMA_SEP +
@@ -55,6 +57,8 @@ public class ThreadsDatabaseContract extends BaseDatabaseContract {
                 COLUMN_NAME_EVENT_INTERVAL_START + DATE_TIME_TYPE + COMMA_SEP +
                 COLUMN_NAME_EVENT_INTERVAL_END + DATE_TIME_TYPE + COMMA_SEP +
                 "FOREIGN KEY(" + COLUMN_NAME_THREAD_UUID + ") REFERENCES " + ThreadsTable.TABLE_NAME +"(" + ThreadsTable.COLUMN_NAME_UUID + ")" +
+                "UNIQUE (" + COLUMN_NAME_UUID + ")" +
+                "ON CONFLICT REPLACE" +
                 " )";
         public static final String COMMAND_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }

@@ -18,7 +18,7 @@ public class TimeChunksDatabaseContract extends BaseDatabaseContract {
         public static final String COLUMN_NAME_INTERVAL_END = "interval_end";
         public static final String COLUMN_NAME_ASSIGNED_TASK_UUID = "assigned_task_uuid";
 
-        public static final String COMMAND_CREATE_TABLE = "CREATE TABLE " +
+        public static final String COMMAND_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
                 COLUMN_NAME_INTERVAL_START + DATE_TIME_TYPE + COMMA_SEP +
@@ -27,7 +27,8 @@ public class TimeChunksDatabaseContract extends BaseDatabaseContract {
                 "FOREIGN KEY(" + COLUMN_NAME_ASSIGNED_TASK_UUID + ") REFERENCES " +
                         ThreadsDatabaseContract.TasksTable.TABLE_NAME +"(" +
                         ThreadsDatabaseContract.TasksTable.COLUMN_NAME_UUID + ")" +
-                " )";
+                "UNIQUE (" + COLUMN_NAME_INTERVAL_START + COMMA_SEP + COLUMN_NAME_INTERVAL_END + ")" +
+                "ON CONFLICT REPLACE" +" )";
         public static final String COMMAND_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 }
