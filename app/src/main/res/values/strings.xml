@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">ThreadsTracker</string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_create_new_task">CreateNewTaskActivity</string>
+
+    <string name="edit_task_title">Task</string>
+    <string name="create_new_task_save">Save</string>
 </resources>
