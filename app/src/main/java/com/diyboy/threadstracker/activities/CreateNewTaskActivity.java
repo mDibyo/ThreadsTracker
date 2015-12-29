@@ -1,17 +1,20 @@
 package com.diyboy.threadstracker.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 
 import com.diyboy.threadstracker.R;
 
 public class CreateNewTaskActivity extends AppCompatActivity {
     public static final String CREATE_NEW_TASK_ACTIVITY_LOG_TAG = "CreateNewTaskActivity";
+
+    public static final String EXTRA_TASK_TITLE =
+            "com.diyboy.threadstracker.activities.createnewtaskactivity.tasktitleaction";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -20,14 +23,12 @@ public class CreateNewTaskActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        Intent intent = getIntent();
+        if (intent.hasExtra(EXTRA_TASK_TITLE)) {
+            EditText editText = (EditText) findViewById(R.id.edit_task_name);
+            editText.setText(intent.getStringExtra(EXTRA_TASK_TITLE));
+        }
+
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
