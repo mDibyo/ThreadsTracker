@@ -10,8 +10,8 @@ import android.widget.EditText;
 
 import com.diyboy.threadstracker.R;
 
-public class CreateNewTaskActivity extends AppCompatActivity {
-    public static final String CREATE_NEW_TASK_ACTIVITY_LOG_TAG = "CreateNewTaskActivity";
+public class EditTaskActivity extends AppCompatActivity {
+    public static final String CREATE_NEW_TASK_ACTIVITY_LOG_TAG = "EditTaskActivity";
 
     public static final String EXTRA_TASK_TITLE =
             "com.diyboy.threadstracker.activities.createnewtaskactivity.tasktitleaction";
