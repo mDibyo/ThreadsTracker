@@ -23,9 +23,9 @@ public class ThreadsDatabaseContract extends BaseDatabaseContract {
                 COLUMN_NAME_UUID + STRING_TYPE + COMMA_SEP +
                 COLUMN_NAME_TITLE + STRING_TYPE + COMMA_SEP +
                 COLUMN_NAME_IMPORTANCE + FLOAT_TYPE + COMMA_SEP +
-                "UNIQUE (" + COLUMN_NAME_UUID + ")" +
+                "UNIQUE (" + COLUMN_NAME_UUID + ") " +
                 "ON CONFLICT REPLACE" +
-                " )";
+                ")";
         public static final String COMMAND_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 
@@ -56,10 +56,10 @@ public class ThreadsDatabaseContract extends BaseDatabaseContract {
                 COLUMN_NAME_ASSIGNMENT_REQUIRED_DURATION + DURATION_TYPE + COMMA_SEP +
                 COLUMN_NAME_EVENT_INTERVAL_START + DATE_TIME_TYPE + COMMA_SEP +
                 COLUMN_NAME_EVENT_INTERVAL_END + DATE_TIME_TYPE + COMMA_SEP +
-                "FOREIGN KEY(" + COLUMN_NAME_THREAD_UUID + ") REFERENCES " + ThreadsTable.TABLE_NAME +"(" + ThreadsTable.COLUMN_NAME_UUID + ")" +
-                "UNIQUE (" + COLUMN_NAME_UUID + ")" +
+                "FOREIGN KEY(" + COLUMN_NAME_THREAD_UUID + ") REFERENCES " + ThreadsTable.TABLE_NAME +"(" + ThreadsTable.COLUMN_NAME_UUID + ")" + COMMA_SEP +
+                "UNIQUE (" + COLUMN_NAME_UUID + ") " +
                 "ON CONFLICT REPLACE" +
-                " )";
+                ")";
         public static final String COMMAND_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 }

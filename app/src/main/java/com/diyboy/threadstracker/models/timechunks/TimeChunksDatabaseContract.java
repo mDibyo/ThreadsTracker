@@ -26,9 +26,10 @@ public class TimeChunksDatabaseContract extends BaseDatabaseContract {
                 COLUMN_NAME_ASSIGNED_TASK_UUID + STRING_TYPE + " NOT NULL" + COMMA_SEP +
                 "FOREIGN KEY(" + COLUMN_NAME_ASSIGNED_TASK_UUID + ") REFERENCES " +
                         ThreadsDatabaseContract.TasksTable.TABLE_NAME +"(" +
-                        ThreadsDatabaseContract.TasksTable.COLUMN_NAME_UUID + ")" +
-                "UNIQUE (" + COLUMN_NAME_INTERVAL_START + COMMA_SEP + COLUMN_NAME_INTERVAL_END + ")" +
-                "ON CONFLICT REPLACE" +" )";
+                        ThreadsDatabaseContract.TasksTable.COLUMN_NAME_UUID + ")" + COMMA_SEP +
+                "UNIQUE (" + COLUMN_NAME_INTERVAL_START + COMMA_SEP + COLUMN_NAME_INTERVAL_END + ") " +
+                "ON CONFLICT REPLACE" +
+                ")";
         public static final String COMMAND_DELETE_TABLE = "DROP TABLE IF EXISTS " + TABLE_NAME;
     }
 }
