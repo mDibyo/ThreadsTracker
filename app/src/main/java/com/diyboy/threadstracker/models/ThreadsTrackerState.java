@@ -2,6 +2,7 @@ package com.diyboy.threadstracker.models;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
@@ -22,17 +23,25 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ThreadsTrackerState {
-    public static String THREADS_TRACKER_STATE_LOG_TAG = "ThreadsTrackerState";
+    public static final String THREADS_TRACKER_STATE_LOG_TAG = "ThreadsTrackerState";
+
+    public static final String THREADS_TRACKER_PREFERENCES_FILE = "threadsTrackerPreferences";
+    public static final String CURRENT_TASK_UUID_PREFERENCE_KEY = "currentTaskUuid";
+    public static final String CURRENT_THREAD_UUID_PREFERENCE_KEY = "currentThreadUuid";
+
 
     private static ThreadsTrackerState instance;
 
     private Map<UUID, Thread> mThreadMap;
     private Map<ReadableDateTime, TimeChunk> mTimeChunkMap;
 
+    private Task mCurrentTask;
+    private Thread mCurrentThread;
+
     public static ThreadsTrackerState getInstance(Context context) {
         if (instance == null) {
             SQLiteDatabase db = DatabaseHelper.getInstance(context).getReadableDatabase();
-            instance = ThreadsTrackerState.fromDatabase(db);
+            instance = new ThreadsTrackerState(db, context);
         }
         return instance;
     }
@@ -43,14 +52,14 @@ public class ThreadsTrackerState {
         mTimeChunkMap = timeChunkMap;
     }
 
-    private static ThreadsTrackerState fromDatabase(SQLiteDatabase db) {
-        Map<UUID, Thread> threadMap = new HashMap<>();
+    private ThreadsTrackerState(SQLiteDatabase db, Context context) {
+        mThreadMap = new HashMap<>();
         Cursor threadsCursor = db.query(
                 ThreadsDatabaseContract.ThreadsTable.TABLE_NAME, null, null, null, null, null, null);
         threadsCursor.moveToFirst();
         while (!threadsCursor.isAfterLast()) {
             Thread thread = Thread.fromDatabaseCursor(threadsCursor);
-            threadMap.put(thread.getUuid(), thread);
+            mThreadMap.put(thread.getUuid(), thread);
             threadsCursor.moveToNext();
         }
         threadsCursor.close();
@@ -70,16 +79,16 @@ public class ThreadsTrackerState {
             } else {
                 task = Assignment.fromDatabaseCursor(tasksCursor);
             }
-            thread = threadMap.get(UUID.fromString(tasksCursor.getString(tasksCursor.getColumnIndex(
+            thread = mThreadMap.get(UUID.fromString(tasksCursor.getString(tasksCursor.getColumnIndex(
                             ThreadsDatabaseContract.TasksTable.COLUMN_NAME_THREAD_UUID)
             )));
             task.setThread(thread);
             taskMap.put(task.getUuid(), task);
-            threadMap.get(thread.getUuid()).getTasks().add(task);
+            mThreadMap.get(thread.getUuid()).getTasks().add(task);
             tasksCursor.moveToNext();
         }
 
-        Map<ReadableDateTime, TimeChunk> timeChunkMap = new HashMap<>();
+        mTimeChunkMap = new HashMap<>();
         Cursor timeChunksCursor = db.query(
                 TimeChunksDatabaseContract.TimeChunksTable.TABLE_NAME,
                 null, null, null, null, null, null);
@@ -87,7 +96,7 @@ public class ThreadsTrackerState {
         TimeChunk timeChunk;
         while (!timeChunksCursor.isAfterLast()) {
             timeChunk = TimeChunk.fromDatabaseCursor(timeChunksCursor);
-            timeChunkMap.put(timeChunk.getInterval().getStart(), timeChunk);
+            mTimeChunkMap.put(timeChunk.getInterval().getStart(), timeChunk);
             String taskUuidString = timeChunksCursor.getString(timeChunksCursor.getColumnIndex(
                     TimeChunksDatabaseContract.TimeChunksTable.COLUMN_NAME_ASSIGNED_TASK_UUID
             ));
@@ -99,7 +108,34 @@ public class ThreadsTrackerState {
             timeChunksCursor.moveToNext();
         }
 
-        return new ThreadsTrackerState(threadMap, timeChunkMap);
+        SharedPreferences preferences = context.getSharedPreferences(
+                THREADS_TRACKER_PREFERENCES_FILE, Context.MODE_PRIVATE);
+        UUID currentTaskUuid = getUuidFromPreferencesFile(
+                preferences, CURRENT_TASK_UUID_PREFERENCE_KEY);
+        if (currentTaskUuid != null && taskMap.containsKey(currentTaskUuid)) {
+            mCurrentTask = taskMap.remove(currentTaskUuid);
+        } else {
+            mCurrentTask = new Assignment(null, null, null);
+        }
+        UUID currentThreadUuid = getUuidFromPreferencesFile(
+                preferences, CURRENT_THREAD_UUID_PREFERENCE_KEY);
+        if (currentThreadUuid != null && mThreadMap.containsKey(currentThreadUuid)) {
+            mCurrentThread = mThreadMap.remove(currentThreadUuid);
+        } else {
+            mCurrentThread = new Thread(null);
+        }
+        preferences.edit()
+                .putString(CURRENT_TASK_UUID_PREFERENCE_KEY, mCurrentTask.getUuid().toString())
+                .putString(CURRENT_THREAD_UUID_PREFERENCE_KEY, mCurrentThread.getUuid().toString())
+                .commit();
+    }
+
+    public static UUID getUuidFromPreferencesFile(SharedPreferences preferences, String key) {
+        String uuidString = preferences.getString(key, null);
+        if (uuidString == null) {
+            return null;
+        }
+        return UUID.fromString(uuidString);
     }
 
     public synchronized boolean flushToDatabase(Context context) {
@@ -142,5 +178,13 @@ public class ThreadsTrackerState {
 
     public Map<ReadableDateTime, TimeChunk> getTimeChunkMap() {
         return mTimeChunkMap;
+    }
+
+    public Task getCurrentTask() {
+        return mCurrentTask;
+    }
+
+    public Thread getCurrentThread() {
+        return mCurrentThread;
     }
 }

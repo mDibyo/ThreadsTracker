@@ -9,7 +9,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.UUID;
 
-public abstract class AbstractTask extends BaseDatabaseSyncable implements Task {
+abstract class AbstractTask extends BaseDatabaseSyncable implements Task {
     protected UUID mUuid;
     protected Thread mThread;
     protected boolean mDone;

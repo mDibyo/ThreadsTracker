@@ -20,9 +20,9 @@ public class ThreadsDatabaseContract extends BaseDatabaseContract {
         public static final String COMMAND_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
-                COLUMN_NAME_UUID + " NOT NULL" + STRING_TYPE + COMMA_SEP +
-                COLUMN_NAME_TITLE + " NOT NULL" + STRING_TYPE + COMMA_SEP +
-                COLUMN_NAME_IMPORTANCE + " NOT NULL" + FLOAT_TYPE + COMMA_SEP +
+                COLUMN_NAME_UUID + STRING_TYPE + COMMA_SEP +
+                COLUMN_NAME_TITLE + STRING_TYPE + COMMA_SEP +
+                COLUMN_NAME_IMPORTANCE + FLOAT_TYPE + COMMA_SEP +
                 "UNIQUE (" + COLUMN_NAME_UUID + ")" +
                 "ON CONFLICT REPLACE" +
                 " )";
@@ -46,10 +46,10 @@ public class ThreadsDatabaseContract extends BaseDatabaseContract {
         public static final String COMMAND_CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " +
                 TABLE_NAME + " (" +
                 _ID + " INTEGER PRIMARY KEY" + COMMA_SEP +
-                COLUMN_NAME_UUID + STRING_TYPE + " NOT NULL" + COMMA_SEP +
-                COLUMN_NAME_THREAD_UUID + STRING_TYPE + " NOT NULL" + COMMA_SEP +
-                COLUMN_NAME_TITLE + STRING_TYPE + " NOT NULL" + COMMA_SEP +
-                COLUMN_NAME_IMPORTANCE + FLOAT_TYPE + " NOT NULL" + COMMA_SEP +
+                COLUMN_NAME_UUID + STRING_TYPE + COMMA_SEP +
+                COLUMN_NAME_THREAD_UUID + STRING_TYPE + COMMA_SEP +
+                COLUMN_NAME_TITLE + STRING_TYPE + COMMA_SEP +
+                COLUMN_NAME_IMPORTANCE + FLOAT_TYPE + COMMA_SEP +
                 COLUMN_NAME_DONE + BOOLEAN_TYPE + " NOT NULL" + COMMA_SEP +
                 COLUMN_NAME_IS_EVENT + BOOLEAN_TYPE + " NOT NULL" + COMMA_SEP +
                 COLUMN_NAME_ASSIGNMENT_DEADLINE + DATE_TIME_TYPE + COMMA_SEP +
