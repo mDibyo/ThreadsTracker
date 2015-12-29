@@ -13,18 +13,20 @@ import com.diyboy.threadstracker.R;
 import com.diyboy.threadstracker.controllers.TasksController;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String MAIN_ACTIVITY_LOG_TAG = "MainActivity";
+    public static final String LOG_TAG = "MainActivity";
 
     private TasksController mController;
 
     public MainActivity() {
         super();
-        mController = new TasksController(this);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mController = new TasksController(this);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -33,10 +35,10 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mController.addTaskActivity();
+                mController.startEditCurrentTaskActivity();
             }
         });
-        Log.i(MAIN_ACTIVITY_LOG_TAG, "MainActivity created");
+        Log.i(LOG_TAG, "MainActivity created");
     }
 
     @Override

@@ -11,21 +11,28 @@ import android.widget.EditText;
 import com.diyboy.threadstracker.R;
 
 public class EditTaskActivity extends AppCompatActivity {
-    public static final String CREATE_NEW_TASK_ACTIVITY_LOG_TAG = "EditTaskActivity";
+    public static final String LOG_TAG = "EditTaskActivity";
+
+    public static final String ACTION_EDIT_OLD_TASK =
+            PackageConstants.PACKAGE_NAME + ".EditTaskActivity.actions.editTask";
+    public static final String ACTION_EDIT_CURRENT_TASK =
+            PackageConstants.PACKAGE_NAME + ".EditTaskActivity.actions.addTask";
 
     public static final String EXTRA_TASK_TITLE =
-            "com.diyboy.threadstracker.activities.createnewtaskactivity.tasktitleaction";
+            PackageConstants.PACKAGE_NAME + ".EditTaskActivity.extras.taskTitle";
+    public static final String EXTRA_IS_EVENT =
+            PackageConstants.PACKAGE_NAME + ".EditTaskActivity.extras.isEvent";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_new_task);
+        setContentView(R.layout.activity_edit_task);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         Intent intent = getIntent();
         if (intent.hasExtra(EXTRA_TASK_TITLE)) {
-            EditText editText = (EditText) findViewById(R.id.edit_task_name);
+            EditText editText = (EditText) findViewById(R.id.edit_task_title);
             editText.setText(intent.getStringExtra(EXTRA_TASK_TITLE));
         }
 
@@ -33,7 +40,6 @@ public class EditTaskActivity extends AppCompatActivity {
     }
 
     public void commitTask(View view) {
-        Log.i(CREATE_NEW_TASK_ACTIVITY_LOG_TAG, "commitTask called");
         finish();
     }
 }

@@ -3,13 +3,15 @@ package com.diyboy.threadstracker.controllers;
 
 import android.content.Context;
 import android.content.Intent;
-import android.view.View;
 
-import com.diyboy.threadstracker.activities.CreateNewTaskActivity;
+import com.diyboy.threadstracker.activities.EditTaskActivity;
 import com.diyboy.threadstracker.models.ThreadsTrackerState;
+import com.diyboy.threadstracker.models.threads.Event;
 import com.diyboy.threadstracker.models.threads.Task;
 
 public class TasksController {
+    public static final String LOG_TAG = "TaskController";
+
     private Context mContext;
     private ThreadsTrackerState mThreadsTrackerState;
 
@@ -18,15 +20,28 @@ public class TasksController {
         mThreadsTrackerState = ThreadsTrackerState.getInstance(context);
     }
 
-    public void addTaskActivity() {
-        Intent intent = new Intent(mContext, CreateNewTaskActivity.class);
+    public void startEditCurrentTaskActivity() {
+        startEditTaskActivityWithAction(
+                mThreadsTrackerState.getCurrentTask(), EditTaskActivity.ACTION_EDIT_CURRENT_TASK);
+    }
+
+    public void startEditTaskActivity(Task task) {
+        startEditTaskActivityWithAction(task, EditTaskActivity.ACTION_EDIT_OLD_TASK);
+    }
+
+    public void startEditTaskActivityWithAction(Task task, String action) {
+        Intent intent = new Intent(mContext, EditTaskActivity.class);
+        addTaskToIntent(intent, task);
+        intent.setAction(action);
         mContext.startActivity(intent);
     }
 
-    public void editTaskActivity(Task task) {
-        Intent intent = new Intent(mContext, CreateNewTaskActivity.class);
-        intent.setAction()
-        intent.putExtra(CreateNewTaskActivity.EXTRA_TASK_TITLE, task.getTitle());
-        mContext.startActivity(intent);
+    private void addTaskToIntent(Intent intent, Task task) {
+        intent.putExtra(EditTaskActivity.EXTRA_TASK_TITLE, task.getTitle());
+        if (task instanceof Event) {
+            intent.putExtra(EditTaskActivity.EXTRA_IS_EVENT, true);
+        } else {
+            intent.putExtra(EditTaskActivity.EXTRA_IS_EVENT, false);
+        }
     }
 }
